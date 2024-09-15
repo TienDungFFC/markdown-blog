@@ -1,17 +1,27 @@
-import { getAllPosts } from "@/lib/markdown";
+import { getDetailPost } from "@/lib/markdown";
+import { Metadata } from "next";
 
-export default function Blog() {
-  const allPost = getAllPosts("content");
-  for (const post of allPost) {
-    console.log("content:", post);
+// Hàm `generateMetadata` để cung cấp các thẻ meta (SEO) cho trang
+export async function generateMetadata(): Promise<Metadata> {
+  const filePath = process.cwd() + "/content/blog";
+  const postData = await getDetailPost("example", filePath);
+
+  return {
+    title: postData.title ?? "Post",
+  };
+}
+
+// Server component để hiển thị nội dung bài viết
+export default async function PostPage() {
+  const filePath = process.cwd() + "/content/blog";
+  const post = await getDetailPost("example", filePath);
+  if (!post) {
+    return null;
   }
-  return allPost.map((post, i) => (
-    <>
-      {post.name}
-      <ul key={i} className="ml-4">
-        {post.childPost.length > 0 &&
-          post.childPost.map((p, idx) => <li key={idx}>{p.name}</li>)}
-      </ul>
-    </>
-  ));
+  return (
+    <div>
+      <h1>{post.title}</h1>
+      <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
+    </div>
+  );
 }

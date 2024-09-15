@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Head from "next/head";
+import Sidebar from "./components/Sidebar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,10 +27,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <meta
+          name="description"
+          content="Viết lại mọi thứ trong quá trình học lập tình"
+        />
+        <meta name="og:title" content={"DungNT | Blog"} />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased lg:flex lg:gap-5`}
       >
-        {children}
+        <Sidebar>abc</Sidebar>
+        <main className="">{children}</main>
       </body>
     </html>
   );
