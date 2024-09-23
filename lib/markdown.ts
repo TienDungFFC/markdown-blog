@@ -6,7 +6,6 @@ import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
 import MarkdownItAbbr from "markdown-it-abbr";
-// import MarkdownItContainer from "markdown-it-container";
 import MarkdownItDeflist from "markdown-it-deflist";
 import MarkdownItFootnote from "markdown-it-footnote";
 import MarkdownItIns from "markdown-it-ins";
@@ -41,10 +40,9 @@ export async function getContentDetail() {
 export interface Post {
   title: string;
   nameFile: string;
-  type: 'file' | 'folder';
+  type: "file" | "folder";
   childPost: Post[];
 }
-
 
 export function getAllPosts(folder: string = "content"): Post[] {
   const contentPath = path.join(process.cwd(), folder);
@@ -70,6 +68,7 @@ export function getAllPosts(folder: string = "content"): Post[] {
 
       post.title = nameFolder;
       post.type = "folder";
+      post.nameFile = fd;
       post.childPost = getAllPosts(path.join(folder, fd));
     } else {
       const file = path.join(contentPath, fd);
@@ -77,7 +76,7 @@ export function getAllPosts(folder: string = "content"): Post[] {
       const result = matter(fileContents);
 
       post.title = result.data.title || "Untitled";
-      post.nameFile = fd.replace(/\.md$/, '');
+      post.nameFile = fd.replace(/\.md$/, "");
       post.type = "file";
     }
 
@@ -86,7 +85,6 @@ export function getAllPosts(folder: string = "content"): Post[] {
 
   return posts;
 }
-
 
 // md.use(MarkdownItEmoji);
 md.use(MarkdownItAbbr);
@@ -108,10 +106,10 @@ export async function getDetailPost(slug: string, dir: string) {
 
   md.use(
     await markdownItShikiji({
-      langs: ['javascript', 'php'],
+      langs: ["javascript", "php"],
       themes: {
-        light: 'dark-plus',
-        dark: 'dark-plus',
+        light: "dark-plus",
+        dark: "dark-plus",
       },
       transformers: [
         transformerNotationDiff(),
@@ -143,6 +141,5 @@ export async function getDetailPost(slug: string, dir: string) {
 
 export async function getAllSlugs(directory: string) {
   const files = fs.readdirSync(directory);
-  return files.map(file => file.replace(/\.md$/, ""));
+  return files.map((file) => file.replace(/\.md$/, ""));
 }
-

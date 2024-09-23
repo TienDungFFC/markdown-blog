@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Head from "next/head";
 import Sidebar from "./components/Sidebar";
+import MobileHeader from "./components/Header";
+import { getAllPosts } from "@/lib/markdown";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,6 +27,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const posts = getAllPosts();
+
   return (
     <html lang="en">
       <Head>
@@ -40,6 +44,7 @@ export default function RootLayout({
       >
         <div className="relative lg:flex lg:items-start">
           <Sidebar />
+          <MobileHeader posts={posts} />
           <main className="flex-1">{children}</main>
         </div>
       </body>

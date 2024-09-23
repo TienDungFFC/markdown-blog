@@ -51,7 +51,7 @@ $oAuth ->authenticate();
 
 ### Factory Method Pattern
 
-```
+```php
 interface Payment {
 	public function pay();
 }
@@ -93,7 +93,7 @@ Trường hợp sử dụng:
 - Khi cần thay đổi giá trị trong quá trình khởi tạo
 - Có thể khởi tạo các thuộc tính tùy chọn
 
-```
+```php
 interface QueryBuilder {
 	 public function select(string $table, array $fields): SQLQueryBuilder;
 	 public function where(string $field, string $value, string $operator = '='): SQLQueryBuilder;
