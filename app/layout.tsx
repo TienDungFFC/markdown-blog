@@ -36,10 +36,12 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased lg:flex lg:gap-5`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Sidebar>abc</Sidebar>
-        <main className="">{children}</main>
+        <div className="relative lg:flex lg:items-start">
+          <Sidebar />
+          <main className="flex-1">{children}</main>
+        </div>
       </body>
     </html>
   );

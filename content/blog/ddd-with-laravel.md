@@ -1,5 +1,7 @@
-# Thiết kế hướng nghiệp vụ với laravel
-
+---
+title: 'Thiết kế hướng nghiệp vụ với Laravel'
+author: 'DungNT'
+---
 Dựa theo tư tưởng của DDD đó là thiết kế úng dụng xoay quanh nghiệp vụ, mô hình hoá phần mềm sao cho đúng với nghiệp vụ nhất.
 
 Việc mà nghiệp vụ liên tục thay đổi và mở rộng dẫn đến ứng dụng ngày càng phức tạp và chồng chéo lên nhau nên khó quản lý và bảo trì, dev mới vào tìm hiểu nghiệp vụ và đọc code cũng rất khó khăn ngay cả khi có doccument. 
@@ -16,7 +18,7 @@ Tầng Domain sẽ là nơi trung tâm xử lý nghiệp vụ của hệ thống
 
 Là các lớp đại diện cho các thực thể trong nghiệp vụ
 
-```
+```php
 namespace App\Domains\Orders\Entities;
 
 class Order
