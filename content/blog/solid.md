@@ -1,3 +1,7 @@
+---
+title: 'SOLID'
+author: 'DungNT'
+---
 ## Single Responsibility Principle
 
 Uncle Bob phát biểu rằng: "A class should have only one reason to change"

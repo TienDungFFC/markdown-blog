@@ -1,3 +1,7 @@
+---
+title: 'OOP'
+author: 'DungNT'
+---
 # OOP là gì
 
 Dựa theo định nghĩa của wiki:
@@ -14,7 +18,7 @@ Procedural Programming đơn giản chỉ là các lời gọi hàm lẫn nhau c
 
 Ví dụ về quản lý ô tô
 
-```
+```js
 #include <stdio.h>
 
 // Các biến để lưu trữ dữ liệu về ô tô
@@ -65,7 +69,7 @@ Như đoạn code ở trên việc để tạo ra đối tượng ô tô thì ph
 Khi requirement thay đổi liên tục cũng dẫn đến việc thay đổi cấu trúc dữ liệu và các hàm
 
 Ví dụ quản lỳ nhiều xe ô tô chúng ta cần phải sửa lại code
-```
+```js
 #define MAX_CARS 100
 
 char brands[MAX_CARS][50];
@@ -101,7 +105,7 @@ int main() {
 
 Khi yêu cầu thêm thông tin loại xe, cần phải thêm tham số vào hàm 
 
-```
+```js
 char carTypes[MAX_CARS][20];  // Thêm biến để lưu loại ô tô
 
 // Hàm thêm thông tin xe, bao gồm loại
@@ -146,7 +150,7 @@ Abstraction là quá trình ẩn giấu đi lớp cài đặt chỉ show ra nh�
 
 Ví dụ:
 
-```
+```php
 interface Payment {
     public function validate();
     public function processPayment();

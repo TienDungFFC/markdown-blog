@@ -1,3 +1,8 @@
+---
+title: "Design Pattern"
+author: "DungNT"
+---
+
 ## Creational Design Pattern
 
 Nhóm này cung cấp các cơ chế để khởi tạo object linh hoạt và dễ tái sử dụng hơn
@@ -8,7 +13,7 @@ Mẫu thiết kế này cung cấp một class và phương thức duy nhất đ
 
 Mục đích sử dụng:
 
-```
+```php
 <?php
 
 interface AuthProvider {

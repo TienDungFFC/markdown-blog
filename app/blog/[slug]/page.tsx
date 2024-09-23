@@ -1,7 +1,7 @@
-import { getDetailPost } from "@/lib/markdown";
+import { getAllSlugs, getDetailPost } from "@/lib/markdown";
 import { Metadata } from "next";
+import path from "path";
 
-// Hàm `generateMetadata` để cung cấp các thẻ meta (SEO) cho trang
 export async function generateMetadata(): Promise<Metadata> {
   const filePath = process.cwd() + "/content/blog";
   const postData = await getDetailPost("example", filePath);
@@ -11,17 +11,30 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// Server component để hiển thị nội dung bài viết
-export default async function PostPage() {
+interface Params {
+  slug: string
+}
+export default async function PostPage({ params }: { params: Params}) {
+  const { slug } = params
   const filePath = process.cwd() + "/content/blog";
-  const post = await getDetailPost("example", filePath);
+  const post = await getDetailPost(slug, filePath);
   if (!post) {
     return null;
   }
   return (
-    <div>
+    <section className="max-w-screen-lg px-8 lg:px-24 py-4 lg:py-8" id="docs_main">
       <h1>{post.title}</h1>
-      <div dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
-    </div>
+      <div className="main-content" dangerouslySetInnerHTML={{ __html: post.contentHtml }}></div>
+    </section>
   );
+}
+
+export async function generateStaticParams() {
+  const filePath = path.join(process.cwd(), "content/blog");
+  
+  const slugs = await getAllSlugs(filePath);
+
+  return slugs.map((slug: string) => ({
+    slug,
+  }));
 }

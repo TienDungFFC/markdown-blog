@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 import MarkdownIt from "markdown-it";
 import Shikiji from "markdown-it-shikiji";
@@ -7,28 +8,19 @@ import matter from "gray-matter";
 import MarkdownItAbbr from "markdown-it-abbr";
 // import MarkdownItContainer from "markdown-it-container";
 import MarkdownItDeflist from "markdown-it-deflist";
-// import MarkdownItEmoji from "markdown-it-emoji";
 import MarkdownItFootnote from "markdown-it-footnote";
-// import MarkdownItCodeGroup from "markdown-it-code-group";
 import MarkdownItIns from "markdown-it-ins";
 import MarkdownItMark from "markdown-it-mark";
-// import MarkdownItTable from "markdown-it-multimd-table";
 import markdownItShikiji from "@shikijs/markdown-it";
 import mila from "markdown-it-link-attributes";
-import theme from "./theme.json";
-import { rendererRich, transformerTwoslash } from "@shikijs/twoslash";
-import { codeToHtml } from "shiki";
 import {
   transformerNotationFocus,
   transformerNotationErrorLevel,
   transformerNotationHighlight,
   transformerNotationDiff,
-  transformerRenderWhitespace,
   transformerNotationWordHighlight,
 } from "@shikijs/transformers";
 import readingTime from "reading-time";
-import { stringToSlug } from "./utils";
-import { cwd } from "process";
 const md = new MarkdownIt({
   html: true,
   linkify: true,
@@ -46,88 +38,89 @@ export async function getContentDetail() {
   );
 }
 
-export function getAllPosts(folder: string = "content") {
-  const contentPath = process.cwd() + "/" + folder;
+export interface Post {
+  title: string;
+  nameFile: string;
+  type: 'file' | 'folder';
+  childPost: Post[];
+}
+
+
+export function getAllPosts(folder: string = "content"): Post[] {
+  const contentPath = path.join(process.cwd(), folder);
   const folders = fs.readdirSync(contentPath);
-  const posts = [];
+  const posts: Post[] = [];
 
   for (const fd of folders) {
-    const ext = fd.split(".").pop();
-    const post = {
-      name: "",
-      slug: "",
+    const ext = path.extname(fd);
+    const post: Post = {
+      title: "",
+      nameFile: "",
       type: "",
       childPost: [],
     };
-    if (!ext || ext != "md") {
+
+    if (!ext || ext !== ".md") {
       const nameFolder = fd
         .split("-")
         .map((name) => {
-          return name[0].toUpperCase() + name.substring(1);
+          return name[0].toUpperCase() + name.slice(1);
         })
         .join(" ");
 
-      post.name = nameFolder;
+      post.title = nameFolder;
       post.type = "folder";
-      post.childPost = getAllPosts(folder + "/" + fd);
+      post.childPost = getAllPosts(path.join(folder, fd));
     } else {
       const file = path.join(contentPath, fd);
       const fileContents = fs.readFileSync(file, "utf8");
       const result = matter(fileContents);
-      post.name = result.data.title;
-      post.slug = result.data.slug;
+
+      post.title = result.data.title || "Untitled";
+      post.nameFile = fd.replace(/\.md$/, '');
       post.type = "file";
     }
+
     posts.push(post);
   }
+
   return posts;
 }
-const mdDocs = new MarkdownIt({
-  html: true,
-  linkify: true,
-  xhtmlOut: true,
-});
-// mdDocs.use(MarkdownItEmoji);
-mdDocs.use(MarkdownItAbbr);
-mdDocs.use(MarkdownItDeflist);
-mdDocs.use(MarkdownItFootnote);
-mdDocs.use(MarkdownItIns);
-mdDocs.use(MarkdownItMark);
 
-mdDocs.use(mila, {
+
+// md.use(MarkdownItEmoji);
+md.use(MarkdownItAbbr);
+md.use(MarkdownItDeflist);
+md.use(MarkdownItFootnote);
+md.use(MarkdownItIns);
+md.use(MarkdownItMark);
+
+md.use(mila, {
   attrs: {
     target: "_blank",
     rel: "noopener",
   },
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function renderMarkdownInline(this: any, md: string, context?: string): any[] {
-  if (context === "tag:param") {
-    md = md.replace(/^([\w$-]+)/, "`$1` ");
-  }
-
-  const children = renderMarkdown.call(this, md);
-  if (
-    children.length === 1 &&
-    children[0].type === "element" &&
-    children[0].tagName === "p"
-  ) {
-    return children[0].children;
-  }
-  return children;
-}
-
 export async function getDetailPost(slug: string, dir: string) {
   const file = path.join(dir, `${slug}.md`);
   const fileContents = fs.readFileSync(file, "utf8");
 
-  mdDocs.use(
-    await Shikiji({
+  md.use(
+    await markdownItShikiji({
+      langs: ['javascript', 'php'],
       themes: {
-        light: "vitesse-light",
-        dark: "vitesse-dark",
+        light: 'dark-plus',
+        dark: 'dark-plus',
       },
+      transformers: [
+        transformerNotationDiff(),
+        transformerNotationHighlight(),
+        transformerNotationFocus(),
+        transformerNotationErrorLevel(),
+        // transformerRenderWhitespace(),
+        transformerNotationWordHighlight(),
+      ],
     })
   );
 
@@ -147,3 +140,9 @@ export async function getDetailPost(slug: string, dir: string) {
     ...(matterResult.data as { data: string; title: string }),
   };
 }
+
+export async function getAllSlugs(directory: string) {
+  const files = fs.readdirSync(directory);
+  return files.map(file => file.replace(/\.md$/, ""));
+}
+
