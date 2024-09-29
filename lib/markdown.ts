@@ -86,7 +86,6 @@ export function getAllPosts(folder: string = "content"): Post[] {
   return posts;
 }
 
-// md.use(MarkdownItEmoji);
 md.use(MarkdownItAbbr);
 md.use(MarkdownItDeflist);
 md.use(MarkdownItFootnote);
@@ -99,9 +98,32 @@ md.use(mila, {
     rel: "noopener",
   },
 });
+function findMdFileRecursively(dir: string, slug: string): string | null {
+  const entries = fs.readdirSync(dir);
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry);
+    const stat = fs.statSync(fullPath);
+
+    if (stat.isDirectory()) {
+      const result = findMdFileRecursively(fullPath, slug);
+      if (result) {
+        return result;
+      }
+    } else if (stat.isFile() && entry === `${slug}.md`) {
+      return fullPath;
+    }
+  }
+
+  return null; 
+}
 
 export async function getDetailPost(slug: string, dir: string) {
-  const file = path.join(dir, `${slug}.md`);
+  const file = findMdFileRecursively(dir, slug);
+
+  if (!file) {
+    throw new Error(`File ${slug}.md not found in directory ${dir}`);
+  }
   const fileContents = fs.readFileSync(file, "utf8");
 
   md.use(
@@ -139,7 +161,27 @@ export async function getDetailPost(slug: string, dir: string) {
   };
 }
 
-export async function getAllSlugs(directory: string) {
-  const files = fs.readdirSync(directory);
-  return files.map((file) => file.replace(/\.md$/, ""));
+
+export async function getAllSlugs(directory: string): Promise<string[]> {
+  const getFilesRecursively = (dir: string): string[] => {
+    const entries = fs.readdirSync(dir);
+    const files: string[] = [];
+
+    entries.forEach((entry) => {
+      const fullPath = path.join(dir, entry);
+      const stat = fs.statSync(fullPath); 
+
+      if (stat.isDirectory()) {
+        files.push(...getFilesRecursively(fullPath));
+      } else if (stat.isFile() && path.extname(entry) === ".md") {
+        files.push(fullPath);
+      }
+    });
+
+    return files;
+  };
+
+  const mdFiles = getFilesRecursively(directory);
+
+  return mdFiles.map((file) => path.relative(directory, file).replace(/\.md$/, ""));
 }

@@ -25,7 +25,7 @@ export default function Sidebar() {
                           className="list-none hover:bg-gray-300 hover:font-semibold"
                         >
                           <ActiveLink
-                            href={`/reflection/${cPost.nameFile}`}
+                            href={`/${cPost.nameFile}`}
                             className="px-8 py-[0.5rem] inline-block w-full"
                           >
                             {cPost.title}

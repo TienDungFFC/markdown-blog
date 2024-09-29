@@ -9,7 +9,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = params;
 
-  const filePath = process.cwd() + "/content/reflection";
+  const filePath = process.cwd() + "/content/";
   const postData = await getDetailPost(slug, filePath);
 
   return {
@@ -22,7 +22,7 @@ interface Params {
 }
 export default async function PostPage({ params }: { params: Params }) {
   const { slug } = params;
-  const filePath = process.cwd() + "/content/reflection";
+  const filePath = process.cwd() + "/content/";
   const post = await getDetailPost(slug, filePath);
   if (!post) {
     return null;
@@ -42,7 +42,7 @@ export default async function PostPage({ params }: { params: Params }) {
 }
 
 export async function generateStaticParams() {
-  const filePath = path.join(process.cwd(), "content/reflection");
+  const filePath = path.join(process.cwd(), "content/");
 
   const slugs = await getAllSlugs(filePath);
 
