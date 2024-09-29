@@ -183,5 +183,5 @@ export async function getAllSlugs(directory: string): Promise<string[]> {
 
   const mdFiles = getFilesRecursively(directory);
 
-  return mdFiles.map((file) => path.relative(directory, file).replace(/\.md$/, ""));
+  return mdFiles.map((file) => path.relative(directory, file).replace(/\.md$/, "").split("/").pop());
 }

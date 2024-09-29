@@ -45,7 +45,7 @@ export async function generateStaticParams() {
   const filePath = path.join(process.cwd(), "content/");
 
   const slugs = await getAllSlugs(filePath);
-
+  console.log("slugs: ", slugs)
   return slugs.map((slug: string) => ({
     slug,
   }));
