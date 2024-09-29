@@ -40,8 +40,49 @@ Theo hình ảnh minh hoạ bên trên:
 
 Ta thấy được cột First Name đã được đánh Index, vậy thì khi truy vấn theo điện kiện giả sử là First Name = 'Patrick' thì ta sẽ đi từ Root Node với key là John, ở đây ta thấy Patrick > John sắp xếp theo ký tự alphabet nên sẽ đi tiếp phía bên phải của Tree. Tiếp tục, ta lại gặp Node với key là Robert, so sánh thì ta thấy Patrick < Robert do đó đi tiếp Node left child node của Robert. Từ đây ta đến được Leaf Node mang key là Patrick và mang giá trị là id (16) của record có chứa ông tên là Patrick
 
+### Composite Index
 
+Là một dạng chỉ mục được đánh trên nhiều hơn 1 cột giúp tối ưu hoá trong các câu sử dụng truy vấn nhấn nhiều điều kiện
+Có thể coi composite index là clustered index khi có nhiều cột được đánh là 1 primary key
 
+![composite index](https://substackcdn.com/image/fetch/w_1456,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbe48f8e9-6d79-4ac2-a8ac-b62c30227ded_1600x983.png)
 
+Điều quan trọng cần để ý là vị trí của các cột được đánh index, nếu lựa chọn hiệu quả thì mới phát huy tốt khả năng sử dụng index
 
+![b-tree](https://imgur.com/b1iLL9m.png)
 
+Ví dụ, ta có bảng order với 1 triệu record như sau:
+
+![order table](https://res.cloudinary.com/du2u3feyq/image/upload/v1727529141/Screenshot%20at%20Sep%2028%2020-12-06_1727529138.png)
+
+Thực thi query (chưa đánh index) lấy các đơn hàng với gía trị < 400 của user_id = 4
+
+```sql
+SELECT * FROM ecommerce.orders WHERE total_price < 400 and user_id = 4;
+```
+
+Mất 0.172s để đưa ra được kết quả
+
+![result_1](https://res.cloudinary.com/du2u3feyq/image/upload/v1727537595/Screenshot%20at%20Sep%2028%2022-32-55_1727537591.png)
+
+Thử đánh composite index ở 2 cột lần lượt là total_price, user_id
+
+```sql
+CREATE INDEX ord_uid_price ON orders(total_price, user_id);
+```
+
+Kết quả thu được câu query giảm xuống 0,0074s:
+
+![result2](https://res.cloudinary.com/du2u3feyq/image/upload/v1727537779/Screenshot%20at%20Sep%2028%2022-35-19_1727537778.png)
+
+Tuy nhiên ta có thể tối ưu hơn nữa bằng cách cho cột user_id lên trước:
+
+```sql
+CREATE INDEX ord_uid_price ON orders(user_id, total_price);
+```
+
+Kết quả giảm xuống 0,0023s:
+
+![result3](https://res.cloudinary.com/du2u3feyq/image/upload/v1727537784/Screenshot%20at%20Sep%2028%2022-36-10_1727537783.png)
+
+Ta có thấy rõ việc để user_id đằng trước giúp thu hẹp khoảng cách nhanh hơn vì chỉ cần so sánh bằng để tìm user_id = 4 rồi từ đó lọc thêm total_price hơn là việc để tìm kiếm các giá trị total_price < 400, sau đó mới tìm các giá trị user_id dẫn đến phải quét qua nhiều bản ghi hơn
