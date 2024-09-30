@@ -161,3 +161,7 @@ function clientCode(QueryBuilder $queryBuilder) {
 ```
 
 ### Singleton 
+
+Là một mẫu thiết kế đảm bảo rằng mỗi một class chỉ có duy nhất một instance trong toàn bộ lifecycle của applicaiton
+
+Mục đích sử dụng
