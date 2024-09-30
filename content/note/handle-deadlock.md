@@ -19,7 +19,7 @@ Transaction 2 update stock với id = 2, tương tự mysql cũng giữ lock b�
 
 Quay lại transaction 1, ta thực thi update stock ở id = 2
 
-![lock3]https://res.cloudinary.com/du2u3feyq/image/upload/v1727623356/docker1_1727623353.png
+![lock3](https://res.cloudinary.com/du2u3feyq/image/upload/v1727623356/docker1_1727623353.png)
 
 Ta thấy rằng câu query chưa được thực hiện vì đang bị transaction 2 giữ lock
 

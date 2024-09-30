@@ -351,6 +351,37 @@ pre.shiki-themes {
   font-size: 2.5rem;
 }
 
+.main-content h2, h3 {
+  font-weight: 600;
+}
+
+.main-content ul {
+  display: block;
+}
+
+.main-content ul li {
+  display: block;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.main-content ul li:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+.main-content ul li:before {
+  content: "";
+  position: absolute;
+  top: 1.2em;
+  left: 0;
+  margin-top: -.9em;
+  background: #86caec;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+}
+    
+
 @media (min-width: 1024px) {
   .main-content p {
     font-size: 1.2rem;

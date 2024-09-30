@@ -12,6 +12,7 @@ Nhóm này cung cấp các cơ chế để khởi tạo object linh hoạt và d
 Mẫu thiết kế này cung cấp một class và phương thức duy nhất để chịu trách nhiệm khởi tạo ra object
 
 Mục đích sử dụng:
++ Sử dụng trong trường hợp chưa biết trước đối tượng nào sẽ được khởi tạo
 
 ```php
 <?php
@@ -87,11 +88,11 @@ class VNPay implements Payment {
 
 ### Builder
 
-Trường hợp sử dụng:
+**Trường hợp sử dụng**:
 
-- Khi tham số truyền vào constructor quá nhiều
-- Khi cần thay đổi giá trị trong quá trình khởi tạo
-- Có thể khởi tạo các thuộc tính tùy chọn
++ Khi tham số truyền vào constructor quá nhiều
++ Khi cần thay đổi giá trị trong quá trình khởi tạo
++ Có thể khởi tạo các thuộc tính tùy chọn
 
 ```php
 interface QueryBuilder {
@@ -158,3 +159,5 @@ function clientCode(QueryBuilder $queryBuilder) {
     echo $query;
 }
 ```
+
+### Singleton 

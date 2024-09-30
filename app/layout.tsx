@@ -32,6 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
+        <title>DungNT | Blog</title>
         <meta
           name="description"
           content="Viết lại mọi thứ trong quá trình học lập tình"
