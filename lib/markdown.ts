@@ -128,7 +128,7 @@ export async function getDetailPost(slug: string, dir: string) {
 
   md.use(
     await markdownItShikiji({
-      langs: ["javascript", "php", 'yaml', 'bash', 'dockerfile'],
+      langs: ["javascript", "php", 'yaml', 'bash', 'dockerfile', 'css'],
       themes: {
         light: "dark-plus",
         dark: "dark-plus",

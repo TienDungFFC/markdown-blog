@@ -154,7 +154,7 @@ h6 {
 
 p {
   font-size: 14px;
-  line-height: 22px;
+  line-height: 1.4;
 }
 
 h1 code,
@@ -344,6 +344,7 @@ pre.shiki-themes {
   padding: 24px;
   border-radius: 8px;
   overflow-x: auto;
+  margin-bottom: 1rem;
 }
 
 #docs_main > h1 {
@@ -366,7 +367,7 @@ pre.shiki-themes {
 }
 
 .main-content ul li:not(:last-child) {
-  margin-bottom: 16px;
+  margin-bottom: 0.5rem;
 }
 
 .main-content ul li:before {

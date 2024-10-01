@@ -1,5 +1,5 @@
 ---
-title: Các lỗi security đã từng dính :(
+title: Các lỗi security đã gặp
 author: DungNT
 ---
 

@@ -163,5 +163,29 @@ function clientCode(QueryBuilder $queryBuilder) {
 ### Singleton 
 
 Là một mẫu thiết kế đảm bảo rằng mỗi một class chỉ có duy nhất một instance trong toàn bộ lifecycle của applicaiton
+Điều này phù hợp khi chỉ cần một instance để sử dụng 
 
-Mục đích sử dụng
+Trường hợp sử dụng:
++ Kết nối cơ sở dữ liệu: Mỗi lần thiết lập kết nối lại phải tốn thêm tài nguyên (ram, cpu, network) vậy nên sử dụng singleton đảm bảo giữ được 1 kết nối duy nhất được sử dụng
+```php
+class Database {
+    private static $instance = null;
+    private $connection;
+
+    private function __construct() {
+        $this->connection = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
+    }
+
+    public static function getInstance() {
+        if (self::$instance === null) {
+            self::$instance = new Database();
+        }
+        return self::$instance;
+    }
+
+    public function getConnection() {
+        return $this->connection;
+    }
+}
+```
++ Config, Logger
